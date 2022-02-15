@@ -4,6 +4,7 @@ const exampleDate = () => new Date(2020, 10, 30, 15, 10, 3);
 
 /* jshint camelcase: false */
 /* jshint multistr: true */
+const a = Symbol("a");
 
 examples.atomicValues = [
   // undefined

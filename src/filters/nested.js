@@ -42,6 +42,17 @@ export function objectsDiffFilter(context) {
     child = new DiffContext(context.left[name], context.right[name]);
     context.push(child, name);
   }
+
+  /*
+    The support for symbols as object keys is very basic - the only intention was to get something
+    in the diff, wasn't really worried what.
+    */
+  let syms = Object.getOwnPropertySymbols(context.left);
+  for (name in syms) {
+    child = new DiffContext(context.left[syms[name]], context.right[syms[name]]);
+    context.push(child, name);
+  }
+
   for (name in context.right) {
     if (!Object.prototype.hasOwnProperty.call(context.right, name)) {
       continue;
@@ -51,6 +62,14 @@ export function objectsDiffFilter(context) {
     }
     if (typeof context.left[name] === 'undefined') {
       child = new DiffContext(undefined, context.right[name]);
+      context.push(child, name);
+    }
+  }
+
+  syms = Object.getOwnPropertySymbols(context.right);
+  for (name in syms) {
+    if (typeof context.left[syms[name]] === 'undefined') {
+      child = new DiffContext(undefined, context.right[syms[name]]);
       context.push(child, name);
     }
   }
